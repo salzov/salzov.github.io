@@ -198,7 +198,7 @@ button:hover{border-color:var(--fg)}
 .cover{margin-bottom:40px;cursor:zoom-in}
 .cover img{width:100%;max-height:78vh;object-fit:cover}
 .dgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:32px 48px;align-items:start}
-.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:0;border-top:1px solid var(--line);padding-top:16px}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:0}
 .facts dt{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
 .facts dd{margin:0}
 .ptext p{margin:0 0 1em;max-width:62ch}
@@ -270,6 +270,8 @@ footer{margin-top:24px;color:var(--muted)}
 .detail.pixel .gal > button img{object-fit:contain}
 @media (max-width:760px){.gal,.detail.pixel .gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
 header nav a.on{text-decoration:underline;text-underline-offset:4px}
+.cover.small{background:none}
+.cover.small img{width:min(100%,480px);margin-inline:auto;display:block}
 </style>
 
 <div class="wrap">
@@ -414,11 +416,11 @@ header nav a.on{text-decoration:underline;text-underline-offset:4px}
 
 <script>
 const IMG = {"aufkirchen":[["aufkirchen/01.jpg",1800,1201],["aufkirchen/02.jpg",1201,1800],["aufkirchen/03.jpg",850,567],["aufkirchen/04.jpg",1201,1800],["aufkirchen/05.jpg",1800,1201],["aufkirchen/06.jpg",567,378],["aufkirchen/07.jpg",567,378]],"chesa-muntanella":[["chesa-muntanella/01.jpg",1280,853],["chesa-muntanella/02.jpg",682,1024],["chesa-muntanella/03.jpg",1800,1350],["chesa-muntanella/04.jpg",1280,853]],"haus-b":[["haus-b/01.jpg",1800,1350],["haus-b/02.jpg",1800,1350],["haus-b/03.jpg",1350,1800],["haus-b/04.jpg",1800,1195]],"haus-d":[["haus-d/01.jpg",1800,1099],["haus-d/02.jpg",1200,1800],["haus-d/03.jpg",1800,1170],["haus-d/04.jpg",1800,1301],["haus-d/05.jpg",1800,920],["haus-d/06.jpg",1800,893]],"haus-f":[["haus-f/01.jpg",1028,683],["haus-f/02.jpg",1025,683],["haus-f/03.jpg",454,683],["haus-f/04.jpg",1028,683],["haus-f/05.jpg",1028,683],["haus-f/06.jpg",1028,683]],"haus-p":[["haus-p/01.jpg",927,1389],["haus-p/02.jpg",1389,927],["haus-p/03.jpg",1389,927],["haus-p/04.jpg",1389,927],["haus-p/05.jpg",681,1020]],"schwaerzenbach":[["schwaerzenbach/01.jpg",943,1800],["schwaerzenbach/02.jpg",854,1800],["schwaerzenbach/03.jpg",1800,1159],["schwaerzenbach/04.jpg",1800,1273]],"studie-fertighaus":[["studie-fertighaus/01.jpg",1800,1273]]};
-Object.assign(IMG, {"planet-plant":[["planet-plant/01.jpg",1800,771],["planet-plant/02.jpg",1800,771],["planet-plant/03.jpg",1800,1013],["planet-plant/04.jpg",1800,771],["planet-plant/05.gif",960,540]],"3d-charakter":[["3d-charakter/01.jpg",875,1172],["3d-charakter/02.jpg",1073,1169],["3d-charakter/03.jpg",954,1168],["3d-charakter/04.jpg",1132,1175],["3d-charakter/05.gif",192,192],["3d-charakter/06.gif",172,172],["3d-charakter/07.gif",256,256],["3d-charakter/08.gif",384,384]],"10-ton-snail":[["10-ton-snail/01.jpg",1800,1013],["10-ton-snail/02.jpg",1800,1013],["10-ton-snail/03.jpg",1800,1013],["10-ton-snail/04.jpg",1800,1013],["10-ton-snail/05.jpg",1800,1013],["10-ton-snail/06.jpg",1800,1013]],"claustrum":[["claustrum/02.jpg", 768, 768],["claustrum/01.jpg",960,540],["claustrum/03.jpg", 1024, 576]],
+Object.assign(IMG, {"planet-plant":[["planet-plant/01.jpg",1800,771],["planet-plant/03.jpg",1800,1013],["planet-plant/04.jpg",1800,771],["planet-plant/05.gif",960,540]],"3d-charakter":[["3d-charakter/01.jpg",875,1172],["3d-charakter/02.jpg",1073,1169],["3d-charakter/03.jpg",954,1168],["3d-charakter/04.jpg",1132,1175],["3d-charakter/05.gif",192,192],["3d-charakter/06.gif",172,172],["3d-charakter/07.gif",256,256],["3d-charakter/08.gif",384,384]],"10-ton-snail":[["10-ton-snail/01.jpg",1800,1013],["10-ton-snail/02.jpg",1800,1013],["10-ton-snail/03.jpg",1800,1013],["10-ton-snail/04.jpg",1800,1013],["10-ton-snail/05.jpg",1800,1013],["10-ton-snail/06.jpg",1800,1013]],"claustrum":[["claustrum/02.jpg", 768, 768],["claustrum/01.jpg",960,540],["claustrum/03.jpg", 1024, 576]],
 
 "trimsheets":[["trimsheets/01.jpg",1400,1400],["trimsheets/02.jpg",1400,1400],["trimsheets/03.png",128,128],["trimsheets/04.png",128,128],["trimsheets/05.png",128,128],["trimsheets/06.png",128,128],["trimsheets/07.png",128,128],["trimsheets/08.png",128,128]],
-"illustrationen":[["illustrationen/01.jpg",1800,1800],["illustrationen/02.png",1024,1024],["illustrationen/03.jpg",1024,768],["illustrationen/04.jpg",1800,771],["illustrationen/05.jpg",1024,1024],["asian-modular-kit/14.jpg",1024,1024]],
-"pixel-art":[["pixel-art/01.gif",128,128],["pixel-art/02.gif",160,160],["pixel-art/03.gif",160,160],["pixel-art/04.gif",160,160],["pixel-art/05.gif",160,160],["pixel-art/06.gif",480,480],["pixel-art/13.png",303,303],["pixel-art/07.png",64,64],["pixel-art/08.png",32,32],["pixel-art/09.png",32,32],["pixel-art/10.png",64,64],["pixel-art/11.png",200,200],["pixel-art/12.jpg",1542,1548]],
+"illustrationen":[["illustrationen/01.jpg",1800,1800],["illustrationen/02.png",1024,1024],["illustrationen/03.jpg",1024,768],["illustrationen/04.jpg",1800,771],["illustrationen/05.jpg",1024,1024],["asian-modular-kit/14.jpg",1024,1024],["planet-plant/02.jpg",1800,771]],
+"pixel-art":[["pixel-art/13.png",303,303],["pixel-art/01.gif",128,128],["pixel-art/02.gif",160,160],["pixel-art/03.gif",160,160],["pixel-art/04.gif",160,160],["pixel-art/05.gif",160,160],["pixel-art/06.gif",480,480],["pixel-art/07.png",64,64],["pixel-art/08.png",32,32],["pixel-art/09.png",32,32],["pixel-art/10.png",64,64],["pixel-art/12.jpg",1542,1548],["pixel-art/11.png",200,200]],
 "3d-werkstatt":[["video/01.jpg",1280,514,"video/01.mp4"],["video/02.jpg",1280,584,"video/02.mp4"],["video/03.jpg",1280,724,"video/03.mp4"],["video/04.jpg",1280,608,"video/04.mp4"],["video/05.jpg",1280,544,"video/05.mp4"]],
 "impossible-landscapes":[["impossible-landscapes/01.jpg",1600,1600],["impossible-landscapes/02.jpg",1024,1024],["impossible-landscapes/03.jpg",1024,1024]],
 "asian-assets":[["asian-assets/01.jpg",1600,1600],["asian-assets/02.jpg",1600,1600],["asian-assets/03.jpg",1600,1600],["asian-assets/04.jpg",1600,1600],["asian-assets/05.jpg",1600,1600],["asian-assets/06.jpg",1600,1600],["asian-assets/07.jpg",1600,1600],["asian-assets/08.jpg",1600,1600],["asian-assets/09.jpg",1600,1600],["asian-assets/10.jpg",1600,1600]],
@@ -431,12 +433,12 @@ const art = [
   { id:"illustrationen", title:"Illustrationen", section:"art", kind:"Plakate, Cover, Porträts", cover:1 },
   { id:"pixel-art", title:"Pixel Art", section:"art", kind:"Figuren, Sprites, Animationen", pixel:true, cover:1 },
   { id:"3d-charakter", title:"3D-Charakter", section:"art", kind:"3D-Modell, Animation", cover:8 },
-  { id:"asian-assets", title:"Dungeon Assets", section:"art", kind:"Low-Poly-Game-Assets, 3D", cover:1 },
-  { id:"asian-modular-kit", title:"Asian Modular Kit", section:"art", kind:"Modulares Baukasten-Set, 3D", cover:1 },
-  { id:"10-ton-snail", title:"10 Ton Snail", section:"art", kind:"Game-Assets, 3D", cover:2 },
+  { id:"asian-assets", title:"Dungeon Assets", section:"art", kind:"Low-Poly-Game-Assets, 3D", nocover:true, cover:1 },
+  { id:"asian-modular-kit", title:"Asian Modular Kit", section:"art", kind:"Modulares Baukasten-Set, 3D", nocover:true, cover:1 },
+  { id:"10-ton-snail", title:"10 Ton Snail", section:"art", kind:"Game-Assets, 3D", nocover:true, cover:2 },
   { id:"3d-werkstatt", title:"Blender Sessions", section:"art", kind:"Bildschirmaufnahmen, Video", cover:1 },
   { id:"cozy-tower", title:"Cozy Tower", section:"art", kind:"Spiel, Screenshots", cover:1 },
-  { id:"claustrum", title:"Claustrum", section:"art", kind:"Spielumgebung, 3D", cover:1 },
+  { id:"claustrum", title:"Claustrum", section:"art", kind:"Spielumgebung, 3D", smallcover:true, cover:1 },
   { id:"trimsheets", title:"Trimsheets", section:"art", kind:"Texturen für 3D", pixel:true, cover:1 }
 ];
 // Angaben aus der Carrd-Seite; alles Leere ist noch offen
@@ -519,7 +521,6 @@ function renderOverview(){
       <a class="prow" href="#${p.id}">
         <div class="thumb">${imgTag(imgs(p)[p.cover-1], p.title)}</div>
         <div class="meta" style="min-width:0"><h3>${esc(p.title)}</h3><span class="mono">${metaLine(p)}</span></div>
-        <span class="go">Projekt ansehen →</span>
       </a>`).join("")}</div>`;
   document.getElementById("agrid").innerHTML = A.map(p => `
     <a class="acard${p.pixel ? " pixel" : ""}" href="#${p.id}">
@@ -625,9 +626,9 @@ function renderDetail(p0){
   const list0 = p.section === "art" ? art : projects;
   const i = list0.indexOf(p0), next = D(list0[(i+1) % list0.length]);
   const backId = p.section === "art" ? "kunst" : "architektur";
-  const list = imgs(p), cover = list[(p.cover||1)-1];
+  const list = imgs(p), cover = p.nocover ? null : list[(p.cover||1)-1];
   const rest = list.filter(x => x !== cover);
-  lbList = cover && !cover.video ? [cover, ...rest] : []; lbTitle = p.title + (p.photo ? L(" · Foto: ", " · Photo: ") + p.photo : "");
+  const off = cover && !cover.video ? 1 : 0; lbList = off ? [cover, ...rest] : rest.filter(x => !x.video); lbTitle = p.title + (p.photo ? L(" · Foto: ", " · Photo: ") + p.photo : "");
   const fact = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
   const isArt = p.section === "art";
   const facts = isArt
@@ -641,15 +642,15 @@ function renderDetail(p0){
     <a class="back" href="#${backId}"><img class="px backgif" src="ui/home.gif" width="190" height="75" alt=""><span>← ${isArt ? L("Alle Arbeiten","All works") : L("Alle Projekte","All projects")}</span></a>
     <h1>${esc(p.title)}</h1>
     ${EDITING ? editForm(p0) : ""}
-    ${cover.video ? `<figure class="cover vcover" style="margin:0 0 40px">${vid(cover, true)}</figure>`
-      : `<figure class="cover" style="margin:0 0 40px" data-i="0">${imgTag(cover, p.title, false)}
+    ${!cover ? "" : cover.video ? `<figure class="cover vcover" style="margin:0 0 40px">${vid(cover, true)}</figure>`
+      : `<figure class="cover${p.smallcover ? " small" : ""}" style="margin:0 0 40px" data-i="0">${imgTag(cover, p.title, false)}
       ${p.photo ? `<figcaption class="mono credit">${L("Foto","Photo")}: ${esc(p.photo)}</figcaption>` : ""}</figure>`}
     ${facts || text ? `<div class="dgrid framed">
       ${facts ? `<dl class="facts">${facts}</dl>` : "<div></div>"}
       ${text ? `<div class="ptext">${text}</div>` : ""}
     </div>` : ""}
     ${rest.length ? `<div class="gal">${rest.map((x, n) => x.video ? `<div class="gitem">${vid(x, false)}</div>`
-      : `<button type="button" data-i="${n+1}" aria-label="Bild ${n+2} vergrößern">${imgTag(x, p.title + " Bild " + (n+2))}</button>`).join("")}</div>` : ""}
+      : `<button type="button" data-i="${n+off}" aria-label="Bild ${n+2} vergrößern">${imgTag(x, p.title + " Bild " + (n+2))}</button>`).join("")}</div>` : ""}
     <div class="next"><a href="#${backId}">← ${L("Übersicht","Overview")}</a><a href="#${next.id}">${isArt ? L("Nächste Arbeit","Next work") : L("Nächstes Projekt","Next project")}: ${esc(next.title)} →</a></div>`;
   const f = det.querySelector("#itemform");
   if (f) f.addEventListener("submit", async e => {
