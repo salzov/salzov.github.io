@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="de" data-variant="c">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Severin Brinkies · Architektur &amp; 3D Art</title>
+<meta name="description" content="Severin Brinkies – Architektur und 3D Art aus München. Architecture and 3D art from Munich.">
+<link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+<style>
+@font-face{font-family:"VT323";src:url("fonts/pxiKyp0ihIEF2isfFJU.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("fonts/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url("fonts/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img,video{max-width:100%}
+
+/* Layout: Variante A = Papier, typografisch, Schrägstrich als Ordnungszeichen; Variante B = Blaupause, schmale Versalien, Projekte als Bildband quer */
+:root{
+  --bg:#f5f5f3; --fg:#1b1c1e; --muted:#6d6f73; --line:#c9cacb; --hatch:#d9dadb; --accent:#1f3a5f;
+  --display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --wdth:100; --case:none; --track:-0.02em; --frame:var(--fg);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141517; --fg:#ecebe8; --muted:#9a9ca0; --line:#3a3c40; --hatch:#2a2c30; --accent:#9db4d6; color-scheme:dark }}
+:root[data-theme="dark"]{ --bg:#141517; --fg:#ecebe8; --muted:#9a9ca0; --line:#3a3c40; --hatch:#2a2c30; --accent:#9db4d6; color-scheme:dark }
+/* Variante B: bewusst immer Blaupause */
+:root[data-variant="b"]{
+  --bg:#17325c; --fg:#f2f5fa; --muted:#a9bbd8; --line:#5b77a3; --hatch:#2a4a7c; --accent:#ffffff;
+  --wdth:68; --case:uppercase; --track:0.005em; color-scheme:dark; --frame:#ffffff;
+}
+/* Variante C: wie die Carrd-Seite, schwarz mit weißen gepunkteten Rahmen und Pixelschrift */
+:root[data-variant="c"]{
+  --bg:#000000; --fg:#f4f4f4; --muted:#a9a9a9; --line:#4a4a4a; --hatch:#262626; --accent:#ffffff; --frame:#ffffff;
+  --display:"VT323", "IBM Plex Mono", monospace; --wdth:100; --case:uppercase; --track:0.02em; color-scheme:dark;
+}
+:root[data-variant="c"] body{font-family:var(--mono);font-size:15px}
+:root[data-variant="c"] .hero-photo img{filter:none}
+:root[data-variant="c"] h1,:root[data-variant="c"] h2,:root[data-variant="c"] h3,:root[data-variant="c"] .name{font-weight:400}
+:root[data-variant="c"] .detail h1{font-size:clamp(48px,9vw,128px);line-height:.9}
+:root[data-variant="c"] .prow h3,:root[data-variant="c"] .acard h3{font-size:clamp(26px,3vw,34px)}
+:root[data-variant="c"] h2::before{content:"// ";color:var(--muted)}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-inline:clamp(16px,4vw,48px);padding-block:0 72px;transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+img{display:block;max-width:100%;height:auto}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em}
+.wrap{max-width:1240px;margin-inline:auto}
+
+/* Kopf */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);
+  display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;justify-content:space-between;
+  padding-block:18px;border-bottom:1px solid var(--line)}
+.name{font-family:var(--display);font-weight:600;font-variation-settings:"wdth" var(--wdth);text-transform:var(--case);letter-spacing:var(--track)}
+nav{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:13px}
+nav a{color:var(--muted)} nav a:hover{color:var(--fg)}
+nav span{color:var(--line)}
+
+/* Startbild */
+.hero{padding-block:clamp(32px,6vw,72px) 40px;display:grid;gap:20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.px{image-rendering:pixelated}
+/* Startbild wie auf Carrd: schwarzer Bildschirm, gepunkteter Rahmen, GIFs */
+.screen{background:#000;color:#f4f4f4;border:6px dotted #f4f4f4;padding:clamp(16px,3vw,32px);display:grid;justify-items:center;gap:10px;
+  font-family:var(--mono);font-size:clamp(13px,1.6vw,16px);letter-spacing:.04em;text-align:center}
+.hero .screen p{margin:0;color:inherit;max-width:none}
+.screen.dash{border-style:dashed}
+.srow{display:flex;align-items:center;justify-content:center;gap:clamp(12px,5vw,72px);flex-wrap:wrap}
+.srow img{width:clamp(72px,12vw,128px);height:auto}
+.srow .welcome{width:clamp(110px,18vw,225px)}
+.sname{text-decoration:underline;text-underline-offset:4px;font-size:1.15em;text-transform:uppercase;margin-top:8px!important}
+.inav{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(16px,6vw,72px)}
+.inav a,.inav a span{color:#f4f4f4}
+.inav a{display:grid;justify-items:center;gap:6px;text-transform:uppercase;font-size:12px}
+.inav img{width:clamp(72px,10vw,110px);height:auto;transition:transform .2s}
+.inav a:hover img{transform:translateY(-4px)}
+.inav a:hover span{text-decoration:underline}
+.intro-line{margin:12px 0 0;max-width:60ch;color:var(--muted)}
+footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.home img{width:120px;height:auto;background:#000}
+.gitem{break-inside:avoid;margin:0 0 16px}
+.gal{border:7px dotted var(--frame);padding:clamp(14px,2.5vw,28px)}
+.back{display:inline-flex;align-items:center;gap:12px}
+.backgif{width:110px;height:auto;background:#000}
+video{display:block;width:100%;height:auto;background:#000}
+.vcover video{max-height:78vh}
+.hero h1{margin:0;font-family:var(--display);font-weight:500;font-variation-settings:"wdth" var(--wdth);
+  text-transform:var(--case);letter-spacing:var(--track);line-height:.95;font-size:clamp(48px,10vw,148px);text-wrap:balance}
+.hero h1 .sl{color:var(--line);font-weight:300}
+.hero p{margin:0;max-width:52ch;color:var(--muted)}
+.hero-photo{margin:0 0 56px;display:grid;gap:8px}
+.hero-photo img{width:100%;aspect-ratio:21/9;object-fit:cover}
+.hero-photo figcaption{color:var(--muted)}
+:root[data-variant="b"] .hero h1{font-size:clamp(64px,15vw,230px);font-weight:700}
+:root[data-variant="b"] .hero h1 .sl{color:var(--muted);display:inline-block;transform:skewX(-12deg)}
+:root[data-variant="b"] .hero-photo img{filter:grayscale(1) contrast(1.05);mix-blend-mode:luminosity;opacity:.9}
+
+/* Abschnitte */
+/* Gepunktete Rahmen um Abschnitte, wie auf der Carrd-Seite */
+section,.framed{border:7px dotted var(--frame);padding:clamp(18px,3.5vw,40px);margin-block:28px}
+.sec-head{margin-bottom:28px}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:28px}
+h2{margin:0;font-family:var(--display);font-weight:500;font-variation-settings:"wdth" var(--wdth);
+  text-transform:var(--case);letter-spacing:var(--track);font-size:clamp(28px,4vw,44px);line-height:1}
+h2::before{content:"/ ";color:var(--line);font-weight:300}
+.sec-head .mono{color:var(--muted)}
+.group{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:40px 0 12px}
+.group:first-of-type{margin-top:0}
+
+/* Platzhalter: Schraffur wie im Plan */
+.ph{position:relative;aspect-ratio:4/3;max-width:100%;border:1px solid var(--line);
+  background:repeating-linear-gradient(45deg,var(--hatch) 0 1px,transparent 1px 10px);overflow:hidden}
+.ph .lab{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:11px;color:var(--muted);
+  background:var(--bg);padding:2px 6px;max-width:calc(100% - 20px)}
+:root[data-variant="b"] .ph{background:repeating-linear-gradient(-30deg,var(--hatch) 0 1px,transparent 1px 7px)}
+
+/* Projektliste A */
+.plist{display:grid}
+.prow{display:grid;grid-template-columns:minmax(120px,220px) minmax(0,1fr) auto;gap:24px;align-items:center;
+  padding-block:16px;border-bottom:1px solid var(--line)}
+.prow:first-child{border-top:1px solid var(--line)}
+.thumb{aspect-ratio:3/2;overflow:hidden;background:var(--hatch)}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.prow:hover .thumb img{transform:scale(1.04)}
+.prow h3{margin:0 0 4px;font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,30px);
+  font-variation-settings:"wdth" var(--wdth);text-transform:var(--case);letter-spacing:var(--track);line-height:1.1}
+.prow .meta{color:var(--muted)}
+.prow .go{font-family:var(--mono);font-size:13px;color:var(--muted);transition:transform .2s}
+.prow:hover .go{transform:translateX(4px);color:var(--fg)}
+.prow:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+/* Projektliste B: Bildband quer */
+:root[data-variant="b"] .plist{grid-auto-flow:column;grid-auto-columns:minmax(240px,30%);overflow-x:auto;gap:20px;padding-bottom:12px;scroll-snap-type:x mandatory}
+:root[data-variant="b"] .prow{grid-template-columns:1fr;border:0;padding:0;scroll-snap-align:start;align-items:start;gap:12px}
+:root[data-variant="b"] .thumb{aspect-ratio:4/5}
+:root[data-variant="b"] .thumb img{filter:grayscale(1);transition:filter .4s,transform .5s}
+:root[data-variant="b"] .prow:hover .thumb img{filter:none}
+:root[data-variant="b"] .prow .go{display:none}
+@media (max-width:640px){.prow{grid-template-columns:110px minmax(0,1fr);gap:14px}.prow .go{display:none}
+  :root[data-variant="b"] .plist{grid-auto-columns:78%}}
+
+/* Kunst */
+.art{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.art .ph{aspect-ratio:1/1}
+.intro{max-width:62ch;margin:0 0 28px}
+:root[data-variant="b"] .art{grid-template-columns:repeat(4,minmax(0,1fr))}
+:root[data-variant="b"] .art .ph:nth-child(odd){transform:translateY(32px)}
+@media (max-width:640px){.art,:root[data-variant="b"] .art{grid-template-columns:1fr 1fr}
+  :root[data-variant="b"] .art .ph:nth-child(odd){transform:none}}
+
+/* Kunst-Karten */
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:32px 20px}
+.acard{display:grid;gap:6px;align-content:start}
+.acard .thumb{aspect-ratio:4/3;margin-bottom:6px}
+.acard h3{margin:0;font-family:var(--display);font-weight:500;font-size:22px;font-variation-settings:"wdth" var(--wdth);text-transform:var(--case);letter-spacing:var(--track);line-height:1.15}
+.acard .mono{color:var(--muted)}
+.acard:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.acard:hover .thumb img{transform:scale(1.04)}
+.acard.pixel .thumb{background:#222}
+.acard.pixel .thumb img{object-fit:contain;padding:12%;image-rendering:pixelated}
+:root[data-variant="b"] .acard:nth-child(even){transform:translateY(28px)}
+@media (max-width:640px){:root[data-variant="b"] .acard:nth-child(even){transform:none}}
+/* Pixel- und Planansicht */
+.detail.pixel img,.lb.pixel img{image-rendering:pixelated}
+.lb.pixel img{width:100%;height:100%}
+.detail.pixel .cover{background:#222;display:grid;place-items:center;padding:4vw}
+.detail.pixel .cover img{width:min(100%,560px);max-height:none;object-fit:contain}
+.detail.pixel .gal{columns:3}
+.detail.pixel .gal button{background:#222;padding:12%}
+.detail.plan .cover{background:#fff;padding:8px}
+.detail.plan .cover img{object-fit:contain;max-height:none}
+@media (max-width:760px){.detail.pixel .gal{columns:2}}
+.vwrap{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:32px;align-items:start}
+.portrait{width:100%;aspect-ratio:1;object-fit:cover;filter:grayscale(1)}
+@media (max-width:560px){.vwrap{grid-template-columns:1fr}.portrait{max-width:180px}}
+/* Vita */
+.vita{display:grid;grid-template-columns:minmax(80px,140px) minmax(0,1fr);gap:12px 24px;margin:0;max-width:760px}
+.vita dt{font-family:var(--mono);font-size:13px;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
+.vita dd{margin:0}
+
+/* Kontakt */
+.contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.mail{font-family:var(--display);font-size:clamp(24px,4vw,40px);font-variation-settings:"wdth" var(--wdth);user-select:all;overflow-wrap:anywhere}
+button{font:inherit;cursor:pointer;background:transparent;color:var(--fg);border:1px solid var(--line);padding:6px 12px}
+button:hover{border-color:var(--fg)}
+
+/* Projektseite */
+.detail{padding-block:40px}
+.back{font-family:var(--mono);font-size:13px;color:var(--muted)} .back:hover{color:var(--fg)}
+.detail h1{margin:20px 0 32px;font-family:var(--display);font-weight:500;font-variation-settings:"wdth" var(--wdth);
+  text-transform:var(--case);letter-spacing:var(--track);line-height:.95;font-size:clamp(44px,8vw,120px);overflow-wrap:anywhere}
+.cover{margin-bottom:40px;cursor:zoom-in}
+.cover img{width:100%;max-height:78vh;object-fit:cover}
+.dgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:32px 48px;align-items:start}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px;margin:0;border-top:1px solid var(--line);padding-top:16px}
+.facts dt{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.facts dd{margin:0}
+.ptext p{margin:0 0 1em;max-width:62ch}
+.todo{color:var(--muted);font-style:italic}
+.gal{columns:2;column-gap:16px;margin-top:56px}
+.gal button{display:block;width:100%;padding:0;border:0;margin:0 0 16px;break-inside:avoid;cursor:zoom-in;background:var(--hatch)}
+.gal img{width:100%}
+.credit{margin-top:4px;color:var(--muted)}
+.next{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.next a:hover{text-decoration:underline}
+@media (max-width:760px){.dgrid{grid-template-columns:1fr}.gal{columns:1}}
+
+/* Bildansicht */
+.lb{position:fixed;inset:0;z-index:20;background:rgba(10,12,16,.94);display:grid;grid-template-rows:1fr auto;padding:16px;padding-block:calc(16px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-bottom,0px))}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:100%;margin:auto;object-fit:contain;min-height:0}
+.lb .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#d9dce2;font-family:var(--mono);font-size:12px;padding-top:12px}
+.lb button{color:#f2f2f2;border-color:#555b66}
+
+/* Sprache */
+html[lang="en"] x-de, html:not([lang="en"]) x-en{display:none}
+html[lang="en"] [data-l="de"], html:not([lang="en"]) [data-l="en"]{display:none}
+/* Rechtliches */
+.legal section{border:0;padding:0;margin:0}
+.legal .ptext p{max-width:70ch}
+.lab2{color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:12px;margin-top:1.4em!important}
+.lab2:first-child{margin-top:0!important}
+.flinks a{text-decoration:underline;text-underline-offset:3px}
+/* Bearbeiten-Modus */
+.ewrap{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:11;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:calc(100% - 32px)}
+.editbtn{background:var(--fg);color:var(--bg);border:1px solid var(--fg);font-family:var(--mono);font-size:12px;padding:8px 14px}
+.editing .editbtn{background:#e8c547;border-color:#e8c547;color:#111}
+.econfirm{background:var(--bg);border:1px solid var(--fg);padding:6px 10px;font-family:var(--mono);font-size:12px}
+.econfirm button{padding:2px 8px}
+.offen{border-color:#e8c547}
+.hint{max-width:62ch;color:var(--muted);margin:0 0 20px}
+.ef{display:grid;gap:14px;max-width:820px}
+.ef.framed{border-color:#e8c547;max-width:none;margin-bottom:40px}
+.ef label{display:grid;gap:6px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.ef small{font-size:11.5px;opacity:.85}
+.ef input,.ef textarea,.ef select{font:inherit;font-family:var(--body);font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);padding:9px 10px;width:100%;min-width:0}
+.ef input:focus,.ef textarea:focus,.ef select:focus{outline:2px solid #e8c547;outline-offset:0;border-color:transparent}
+.ef textarea{resize:vertical;line-height:1.5}
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.eh{margin:18px 0 0;font-family:var(--mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--fg)}
+.ebar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.primary{background:#e8c547;color:#111;border-color:#e8c547;font-family:var(--mono)}
+.estat{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.olist{list-style:none;margin:8px 0 0;padding:0;display:grid}
+.olist li{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line)}
+.olist a{text-decoration:underline;text-underline-offset:3px}
+.olist .mono{color:var(--muted)}
+@media (max-width:700px){.ewrap{bottom:calc(64px + env(safe-area-inset-bottom,0px))}}
+/* Variantenschalter */
+.switch{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;display:flex;
+  background:var(--bg);border:1px solid var(--fg);font-family:var(--mono);font-size:12px}
+.switch button{border:0;padding:8px 12px;color:var(--muted)}
+.switch button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+footer{margin-top:24px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Quadratische Vorschaubilder; beim Klick öffnet die Bildansicht im Originalformat */
+.thumb,.acard .thumb,:root[data-variant="b"] .thumb{aspect-ratio:1/1}
+.gal,.detail.pixel .gal{columns:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gal > button,.gal > .gitem{aspect-ratio:1/1;margin:0;overflow:hidden;width:100%;padding:0}
+.gal > button img,.gal > .gitem video,.gal > .gitem .ph{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.gal > button:hover img{transform:scale(1.04)}
+.detail.pixel .gal > button{padding:12%}
+.detail.pixel .gal > button img{object-fit:contain}
+@media (max-width:760px){.gal,.detail.pixel .gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+<div class="wrap">
+  <header>
+    <a class="name" href="#start">Severin Brinkies</a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#architektur"><x-de>Architektur</x-de><x-en>Architecture</x-en></a><span>/</span>
+      <a href="#kunst"><x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></a><span>/</span>
+      <a href="#vita"><x-de>Vita</x-de><x-en>CV</x-en></a><span>/</span>
+      <a href="#kontakt"><x-de>Kontakt</x-de><x-en>Contact</x-en></a>
+    </nav>
+  </header>
+
+  <main id="overview">
+    <div class="hero" id="start">
+      <h1 class="sr">Severin Brinkies, Architektur und Kunst</h1>
+      <div class="screen">
+        <div class="srow"><img class="px" src="img/ui/cube.gif" width="128" height="128" alt=""><img class="px welcome" src="img/ui/welcome.gif" width="225" height="80" alt="Welcome!"><img class="px" src="img/ui/cube.gif" width="128" height="128" alt=""></div>
+        <p class="sname">// Severin Brinkies</p>
+        <p>// <x-de>Architektur &amp; 3D Art</x-de><x-en>Architecture &amp; 3D Art</x-en></p>
+      </div>
+      <nav class="screen dash inav" aria-label="Bereiche">
+        <a href="#architektur"><img class="px" src="img/ui/arch.gif" width="128" height="128" alt=""><span>// <x-de>Architektur</x-de><x-en>Architecture</x-en></span></a>
+        <a href="#kunst"><img class="px" src="img/ui/art.gif" width="128" height="128" alt=""><span>// <x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></span></a>
+        <a href="#kontakt"><img class="px" src="img/ui/contact.gif" width="128" height="128" alt=""><span>// <x-de>Kontakt</x-de><x-en>Contact</x-en></span></a>
+      </nav>
+    </div>
+
+    <section id="offen" class="offen" hidden></section>
+
+    <section id="architektur">
+      <div class="sec-head"><h2><x-de>Architektur</x-de><x-en>Architecture</x-en></h2></div>
+      <div id="plists"></div>
+    </section>
+
+    <section id="kunst">
+      <div class="sec-head"><h2><x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></h2></div>
+      <div class="agrid" id="agrid"></div>
+    </section>
+
+    <section id="vita">
+      <div class="sec-head"><h2><x-de>Vita</x-de><x-en>CV</x-en></h2></div>
+      <div class="vwrap">
+      <img class="portrait" src="img/portrait.jpg" width="512" height="512" alt="Porträt Severin Brinkies" loading="lazy">
+      <dl class="vita" id="vita-dl"></dl>
+      </div>
+    </section>
+
+    <section id="kontakt">
+      <div class="sec-head"><h2><x-de>Kontakt</x-de><x-en>Contact</x-en></h2></div>
+      <div class="contact">
+        <span class="mail" id="mail">mail@beispiel.de</span>
+        <button type="button" id="copy"><x-de>Adresse kopieren</x-de><x-en>Copy address</x-en></button>
+      </div>
+    </section>
+    <footer class="mono"><a href="#start" class="home" aria-label="Zurück zum Start"><img class="px" src="img/ui/home.gif" width="190" height="75" alt="Zurück zum Start"></a><span class="flinks"><a href="#impressum"><x-de>Impressum</x-de><x-en>Legal notice</x-en></a> · <a href="#datenschutz"><x-de>Datenschutz</x-de><x-en>Privacy</x-en></a> · © Severin Brinkies</span></footer>
+  </main>
+
+  <main id="detail" class="detail" hidden></main>
+  <main id="legal" class="detail legal" hidden>
+    <section id="impressum-page" hidden>
+      <a class="back" href="#start"><img class="px backgif" src="img/ui/home.gif" width="190" height="75" alt=""><span>← Start</span></a>
+      <div data-l="de">
+      <h1>Impressum</h1>
+      <div class="framed ptext">
+        <p class="mono lab2">Angaben gemäß § 5 DDG</p>
+        <p>Severin Brinkies<br>Steinseestr. 20<br>81671 München</p>
+        <p class="mono lab2">Kontakt</p>
+        <p>E-Mail: <span class="mailtxt">severin.brinkies@posteo.de</span></p>
+        <p class="mono lab2">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</p>
+        <p>Severin Brinkies, Anschrift wie oben</p>
+        <p class="mono lab2">Bildrechte</p>
+        <p>Architekturfotografie: Herbert Stolz, Petra Steiner, Cornelia Kurz, Peter Bauer &amp; Manuel Pale. Alle übrigen Bilder: Severin Brinkies.</p>
+      </div>
+      </div>
+      <div data-l="en">
+      <h1>Legal notice</h1>
+      <div class="framed ptext">
+        <p class="mono lab2">Information according to § 5 DDG (German Digital Services Act)</p>
+        <p>Severin Brinkies<br>Steinseestr. 20<br>81671 München<br>Germany</p>
+        <p class="mono lab2">Contact</p>
+        <p>Email: <span class="mailtxt">severin.brinkies@posteo.de</span></p>
+        <p class="mono lab2">Responsible for content according to § 18 (2) MStV</p>
+        <p>Severin Brinkies, address as above</p>
+        <p class="mono lab2">Image credits</p>
+        <p>Architectural photography: Herbert Stolz, Petra Steiner, Cornelia Kurz, Peter Bauer &amp; Manuel Pale. All other images: Severin Brinkies.</p>
+        <p class="mono lab2">Note</p>
+        <p>This is a translation for convenience. The German version is legally binding.</p>
+      </div>
+      </div>
+    </section>
+    <section id="datenschutz-page" hidden>
+      <a class="back" href="#start"><img class="px backgif" src="img/ui/home.gif" width="190" height="75" alt=""><span>← Start</span></a>
+      <div data-l="de">
+      <h1>Datenschutz</h1>
+      <div class="framed ptext">
+        <p class="mono lab2">Verantwortlicher</p>
+        <p>Severin Brinkies, Steinseestr. 20, 81671 München, E-Mail: <span class="mailtxt">severin.brinkies@posteo.de</span></p>
+        <p class="mono lab2">Hosting</p>
+        <p>Diese Website wird bei GitHub Pages gehostet, einem Dienst der GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Beim Aufruf der Seite verarbeitet GitHub technisch notwendige Daten, insbesondere Ihre IP-Adresse, Datum und Uhrzeit des Zugriffs sowie Browser-Informationen, um die Seite auszuliefern und die Sicherheit des Dienstes zu gewährleisten. Dabei kann eine Übermittlung in die USA stattfinden. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; mein berechtigtes Interesse liegt in einer sicheren und zuverlässigen Bereitstellung der Website. Weitere Informationen finden Sie in der Datenschutzerklärung von GitHub.</p>
+        <p class="mono lab2">Cookies, Analyse, Schriften</p>
+        <p>Diese Website setzt keine Cookies, verwendet keine Analyse- oder Tracking-Werkzeuge und bindet keine Inhalte von Drittanbietern ein. Schriftarten werden lokal von diesem Server geladen.</p>
+        <p class="mono lab2">Kontakt per E-Mail</p>
+        <p>Wenn Sie mir eine E-Mail schreiben, verarbeite ich Ihre Angaben nur, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b bzw. f DSGVO), und lösche sie, sobald sie dafür nicht mehr benötigt werden und keine gesetzlichen Aufbewahrungspflichten bestehen.</p>
+        <p class="mono lab2">Ihre Rechte</p>
+        <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO). Wenden Sie sich dafür an die oben genannte E-Mail-Adresse. Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren, in Bayern beim Bayerischen Landesamt für Datenschutzaufsicht (BayLDA).</p>
+      </div>
+      </div>
+      <div data-l="en">
+      <h1>Privacy</h1>
+      <div class="framed ptext">
+        <p class="mono lab2">Controller</p>
+        <p>Severin Brinkies, Steinseestr. 20, 81671 München, Germany, email: <span class="mailtxt">severin.brinkies@posteo.de</span></p>
+        <p class="mono lab2">Hosting</p>
+        <p>This website is hosted on GitHub Pages, a service of GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. When you visit the site, GitHub processes technically necessary data, in particular your IP address, the date and time of access and browser information, in order to deliver the site and keep the service secure. This may involve a transfer to the USA. The legal basis is Art. 6 (1) (f) GDPR; my legitimate interest is the secure and reliable provision of this website. For more information, see GitHub's privacy statement.</p>
+        <p class="mono lab2">Cookies, analytics, fonts</p>
+        <p>This website does not set cookies, does not use analytics or tracking tools and does not embed third-party content. Fonts are served locally from this server.</p>
+        <p class="mono lab2">Contact by email</p>
+        <p>If you send me an email, I process your details only to answer your request (Art. 6 (1) (b) or (f) GDPR) and delete them once they are no longer needed and no statutory retention obligations apply.</p>
+        <p class="mono lab2">Your rights</p>
+        <p>You have the right of access, rectification, erasure, restriction of processing, data portability and objection (Art. 15 to 21 GDPR). Please contact the email address above. You also have the right to lodge a complaint with a data protection supervisory authority; in Bavaria this is the Bayerisches Landesamt für Datenschutzaufsicht (BayLDA).</p>
+        <p class="mono lab2">Note</p>
+        <p>This is a translation for convenience. The German version is legally binding.</p>
+      </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Bildansicht">
+  <img id="lbImg" alt="">
+  <div class="bar"><span id="lbCap"></span>
+    <span style="display:flex;gap:8px"><button type="button" id="lbPrev" aria-label="Vorheriges Bild">←</button><button type="button" id="lbNext" aria-label="Nächstes Bild">→</button><button type="button" id="lbClose"><x-de>Schließen</x-de><x-en>Close</x-en></button></span>
+  </div>
+</div>
+
+<div class="ewrap"><button type="button" id="editbtn" class="editbtn" aria-pressed="false" hidden>Bearbeiten</button></div>
+<div class="switch" role="group" aria-label="Sprache / Language">
+  <button type="button" id="langDE" aria-pressed="true">DE</button>
+  <button type="button" id="langEN" aria-pressed="false">EN</button>
+</div>
+
+<script>
+const IMG = {"aufkirchen":[["img/aufkirchen/01.jpg",1800,1201],["img/aufkirchen/02.jpg",1201,1800],["img/aufkirchen/03.jpg",850,567],["img/aufkirchen/04.jpg",1201,1800],["img/aufkirchen/05.jpg",1800,1201],["img/aufkirchen/06.jpg",567,378],["img/aufkirchen/07.jpg",567,378]],"chesa-muntanella":[["img/chesa-muntanella/01.jpg",1280,853],["img/chesa-muntanella/02.jpg",682,1024],["img/chesa-muntanella/03.jpg",1800,1350],["img/chesa-muntanella/04.jpg",1280,853]],"haus-b":[["img/haus-b/01.jpg",1800,1350],["img/haus-b/02.jpg",1800,1350],["img/haus-b/03.jpg",1350,1800],["img/haus-b/04.jpg",1800,1195]],"haus-d":[["img/haus-d/01.jpg",1800,1099],["img/haus-d/02.jpg",1200,1800],["img/haus-d/03.jpg",1800,1170],["img/haus-d/04.jpg",1800,1301],["img/haus-d/05.jpg",1800,920],["img/haus-d/06.jpg",1800,893]],"haus-f":[["img/haus-f/01.jpg",1028,683],["img/haus-f/02.jpg",1025,683],["img/haus-f/03.jpg",454,683],["img/haus-f/04.jpg",1028,683],["img/haus-f/05.jpg",1028,683],["img/haus-f/06.jpg",1028,683]],"haus-p":[["img/haus-p/01.jpg",927,1389],["img/haus-p/02.jpg",1389,927],["img/haus-p/03.jpg",1389,927],["img/haus-p/04.jpg",1389,927],["img/haus-p/05.jpg",681,1020]],"schwaerzenbach":[["img/schwaerzenbach/01.jpg",943,1800],["img/schwaerzenbach/02.jpg",854,1800],["img/schwaerzenbach/03.jpg",1800,1159],["img/schwaerzenbach/04.jpg",1800,1273]],"studie-fertighaus":[["img/studie-fertighaus/01.jpg",1800,1273]]};
+Object.assign(IMG, {"planet-plant":[["img/planet-plant/01.jpg",1800,771],["img/planet-plant/02.jpg",1800,771],["img/planet-plant/03.jpg",1800,1013],["img/planet-plant/04.jpg",1800,771],["img/planet-plant/05.gif",960,540]],"3d-charakter":[["img/3d-charakter/01.jpg",875,1172],["img/3d-charakter/02.jpg",1073,1169],["img/3d-charakter/03.jpg",954,1168],["img/3d-charakter/04.jpg",1132,1175],["img/3d-charakter/05.gif",192,192],["img/3d-charakter/06.gif",172,172],["img/3d-charakter/07.gif",256,256],["img/3d-charakter/08.gif",384,384]],"10-ton-snail":[["img/10-ton-snail/01.jpg",1800,1013],["img/10-ton-snail/02.jpg",1800,1013],["img/10-ton-snail/03.jpg",1800,1013],["img/10-ton-snail/04.jpg",1800,1013],["img/10-ton-snail/05.jpg",1800,1013],["img/10-ton-snail/06.jpg",1800,1013]],"claustrum":[["img/claustrum/02.jpg", 768, 768],["img/claustrum/01.jpg",960,540],["img/claustrum/03.jpg", 1024, 576]],
+
+"trimsheets":[["img/trimsheets/01.jpg",1400,1400],["img/trimsheets/02.jpg",1400,1400],["img/trimsheets/03.png",128,128],["img/trimsheets/04.png",128,128],["img/trimsheets/05.png",128,128],["img/trimsheets/06.png",128,128],["img/trimsheets/07.png",128,128],["img/trimsheets/08.png",128,128]],
+"illustrationen":[["img/illustrationen/01.jpg",1800,1800],["img/illustrationen/02.png",1024,1024],["img/illustrationen/03.jpg",1024,768],["img/illustrationen/04.jpg",1800,771],["img/illustrationen/05.jpg",1024,1024],["img/asian-modular-kit/14.jpg",1024,1024]],
+"pixel-art":[["img/pixel-art/01.gif",128,128],["img/pixel-art/02.gif",160,160],["img/pixel-art/03.gif",160,160],["img/pixel-art/04.gif",160,160],["img/pixel-art/05.gif",160,160],["img/pixel-art/06.gif",480,480],["img/pixel-art/13.png",303,303],["img/pixel-art/07.png",64,64],["img/pixel-art/08.png",32,32],["img/pixel-art/09.png",32,32],["img/pixel-art/10.png",64,64],["img/pixel-art/11.png",200,200],["img/pixel-art/12.jpg",1542,1548]],
+"3d-werkstatt":[["img/video/01.jpg",1280,514,"img/video/01.mp4"],["img/video/02.jpg",1280,584,"img/video/02.mp4"],["img/video/03.jpg",1280,724,"img/video/03.mp4"],["img/video/04.jpg",1280,608,"img/video/04.mp4"],["img/video/05.jpg",1280,544,"img/video/05.mp4"]],
+"impossible-landscapes":[["img/impossible-landscapes/01.jpg",1600,1600],["img/impossible-landscapes/02.jpg",1024,1024],["img/impossible-landscapes/03.jpg",1024,1024]],
+"asian-assets":[["img/asian-assets/01.jpg",1600,1600],["img/asian-assets/02.jpg",1600,1600],["img/asian-assets/03.jpg",1600,1600],["img/asian-assets/04.jpg",1600,1600],["img/asian-assets/05.jpg",1600,1600],["img/asian-assets/06.jpg",1600,1600],["img/asian-assets/07.jpg",1600,1600],["img/asian-assets/08.jpg",1600,1600],["img/asian-assets/09.jpg",1600,1600],["img/asian-assets/10.jpg",1600,1600]],
+"asian-modular-kit":[["img/asian-modular-kit/01.jpg",1600,1202],["img/asian-modular-kit/02.jpg",1600,1600],["img/asian-modular-kit/03.jpg",1600,1600],["img/asian-modular-kit/04.jpg",1600,1600],["img/asian-modular-kit/05.jpg",1600,1600],["img/asian-modular-kit/06.jpg",1600,1600],["img/asian-modular-kit/07.jpg",1600,1600],["img/asian-modular-kit/08.jpg",1600,1600],["img/asian-modular-kit/09.jpg",1600,1600],["img/asian-modular-kit/10.jpg",1600,1600],["img/asian-modular-kit/11.jpg",1600,1600],["img/asian-modular-kit/12.jpg",1600,1600],["img/asian-modular-kit/13.jpg",1600,1600]],
+"cozy-tower":[["img/cozy-tower/01.jpg",1800,1018],["img/cozy-tower/02.jpg",1800,1018],["img/cozy-tower/03.jpg",1800,1006],["img/cozy-tower/04.jpg",1797,1009],["img/cozy-tower/05.jpg",1800,1025],["img/cozy-tower/06.jpg",1800,1035],["img/cozy-tower/07.jpg",1800,969],["img/cozy-tower/08.jpg",1800,1051],["img/cozy-tower/09.jpg",1799,1003]],
+"messestand-roy-robson":[["img/messestand-roy-robson/01.png",2000,1414]]});
+const art = [
+  { id:"impossible-landscapes", title:"Impossible Landscapes", section:"art", kind:"Digitale Bilder", cover:1 },
+  { id:"planet-plant", title:"Planet Plant", section:"art", kind:"Digitale Malerei, Animation", cover:1 },
+  { id:"illustrationen", title:"Illustrationen", section:"art", kind:"Plakate, Cover, Porträts", cover:1 },
+  { id:"pixel-art", title:"Pixel Art", section:"art", kind:"Figuren, Sprites, Animationen", pixel:true, cover:1 },
+  { id:"3d-charakter", title:"3D-Charakter", section:"art", kind:"3D-Modell, Animation", cover:8 },
+  { id:"asian-assets", title:"Dungeon Assets", section:"art", kind:"Low-Poly-Game-Assets, 3D", cover:1 },
+  { id:"asian-modular-kit", title:"Asian Modular Kit", section:"art", kind:"Modulares Baukasten-Set, 3D", cover:1 },
+  { id:"10-ton-snail", title:"10 Ton Snail", section:"art", kind:"Game-Assets, 3D", cover:2 },
+  { id:"3d-werkstatt", title:"Blender Sessions", section:"art", kind:"Bildschirmaufnahmen, Video", cover:1 },
+  { id:"cozy-tower", title:"Cozy Tower", section:"art", kind:"Spiel, Screenshots", cover:1 },
+  { id:"claustrum", title:"Claustrum", section:"art", kind:"Spielumgebung, 3D", cover:1 },
+  { id:"trimsheets", title:"Trimsheets", section:"art", kind:"Texturen für 3D", pixel:true, cover:1 }
+];
+// Angaben aus der Carrd-Seite; alles Leere ist noch offen
+const projects = [
+  { id:"haus-d", title:"Haus D", group:"Gebaut", kind:"Wohnhaus", lp:"LP 1–9", partner:"mit Benno Bauer", photo:"Herbert Stolz", cover:5 },
+  { id:"aufkirchen", title:"Aufkirchen", group:"Gebaut", lp:"LP 1–9", partner:"mit Benno Bauer", photo:"Petra Steiner", place:"Aufkirchen", cover:1 },
+  { id:"haus-p", title:"Haus P", group:"Gebaut", cover:2 },
+  { id:"haus-f", title:"Haus F", group:"Gebaut", cover:6 },
+  { id:"chesa-muntanella", title:"Chesa Muntanella", group:"Gebaut", cover:4 },
+  { id:"haus-b", title:"Haus B", group:"Gebaut", cover:1 },
+  { id:"schwaerzenbach", title:"Schwärzenbach", group:"Entwürfe und Studien", kind:"Entwurf", cover:3 },
+  { id:"studie-fertighaus", title:"Studie Fertighaus", group:"Entwürfe und Studien", kind:"Studie", cover:1 },
+  { id:"messestand-roy-robson", title:"Messestand Roy Robson", group:"Entwürfe und Studien", kind:"Messestand", place:"Pitti", year:"2022", plan:true, cover:1 }
+];
+const all = projects.concat(art);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const imgs = p => IMG[p.id].map(([src,w,h,video]) => ({src,w,h,video}));
+const ph = (label) => `<div class="ph"><span class="lab">${esc(label)}</span></div>`;
+const vid = (x, auto) => `<video src="${x.video}" poster="${x.src}" width="${x.w}" height="${x.h}" muted loop playsinline controls preload="${auto ? "auto" : "none"}"${auto ? " autoplay" : ""}></video>`;
+const imgTag = (i, alt, lazy=true) => `<img src="${i.src}" width="${i.w}" height="${i.h}" alt="${esc(alt)}"${lazy ? ' loading="lazy"' : ""}>`;
+const metaLine = p => [p.kind, p.lp, p.partner].filter(Boolean).map(esc).join(" · ");
+
+// ---------- Inhalte: Grunddaten + Ergänzungen aus dem Bearbeiten-Modus ----------
+let EDITS = {"schwaerzenbach": {"group": "Entwürfe und Studien", "kind": "Wettbewerbsbeitrag", "lp": "", "note": "", "partner": "mit Benno Bauer", "photo": "", "text": "", "title": "Schwärzenbach", "year": "2017"}, "studie-fertighaus": {"group": "Entwürfe und Studien", "kind": "Studie", "lp": "", "note": "", "partner": "mit Benno Bauer", "photo": "", "text": "", "title": "Studie Fertighaus", "year": "2024"}, "haus-p": {"group": "Gebaut", "kind": "Wohnhaus", "lp": "LP 1-9", "note": "", "partner": "mit Benno Bauer", "photo": "Petra Steiner", "text": "", "title": "Haus P", "year": "2021"}, "haus-d": {"group": "Gebaut", "kind": "Wohnhaus", "lp": "LP 1–9", "note": "", "partner": "mit Benno Bauer", "photo": "Herbert Stolz", "text": "", "title": "Haus D", "year": "2017"}, "chesa-muntanella": {"group": "Gebaut", "kind": "Ferienapartements", "lp": "LP 1-4", "note": "", "partner": "mit Benno Bauer", "photo": "Peter Bauer & Manuel Pale", "text": "", "title": "Chesa Muntanella", "year": "2015"}, "haus-b": {"group": "Gebaut", "kind": "Wohnhaus", "lp": "LP 1-9", "note": "", "partner": "mit Benno Bauer", "photo": "Cornelia Kurz", "text": "", "title": "Haus B", "year": "2013"}, "haus-f": {"group": "Gebaut", "kind": "Wohnhaus", "lp": "LP 1-5", "note": "", "partner": "mit Benno Bauer", "photo": "Cornelia Kurz", "text": "", "title": "Haus F", "year": "2013"}, "site": {"answers": {"impressum": "Severin Brinkies, Steinseestr. 20, 81671 München", "namen": "keine Jahreszahlen, keine Texte bei Freien Arbeiten", "woodshaker": "raus"}, "email": "severin.brinkies@posteo.de"}, "aufkirchen": {"group": "Gebaut", "kind": "Pfarrzentrum", "lp": "LP 1–7", "note": "", "partner": "mit Benno Bauer", "photo": "Petra Steiner", "text": "", "title": "Aufkirchen", "year": "2018"}, "messestand-roy-robson": {"group": "Entwürfe und Studien", "kind": "Messestand", "lp": "", "note": "", "partner": "", "photo": "", "text": "", "title": "Messestand Roy Robson", "year": "2022"}}, DB = null, EDITING = false, DIRTY = false;
+const SITE_DEFAULT = {
+  email: "",
+  intro: "Severin Brinkies, freier Architekt und Künstler. Häuser in Holz und Stein, vom ersten Entwurf bis zur Bauleitung, daneben Malerei, Pixel Art und 3D-Arbeiten für Spielwelten.",
+  vita: "1985 | Geboren in Hausham\nStudium | Master of Arts Architektur, Hochschule München; Bachelor of Arts Architektur, Hochschule München\nBerufserfahrung | Architekturbüro Mariam Seifert, Grünwald: Mitarbeit in Vorplanung, Entwurfs-, Genehmigungs- und Ausführungsplanung, Vorbereitung und Mitwirkung bei der Vergabe; Architekturbüro Benno Bauer, München, freier Mitarbeiter: Mitarbeit in Vorplanung, Entwurfs-, Genehmigungs- und Ausführungsplanung, Vorbereitung und Mitwirkung bei der Vergabe\nHeute | Selbstständig, Architektur und 3D Art",
+  vita_en: "1985 | Born in Hausham, Germany\nEducation | Master of Arts in Architecture, Munich University of Applied Sciences; Bachelor of Arts in Architecture, Munich University of Applied Sciences\nExperience | Mariam Seifert Architektin, Grünwald: preliminary and design planning, permit and construction documents, preparation of and assistance with tendering; Architekturbüro Benno Bauer, Munich, freelance: preliminary and design planning, permit and construction documents, preparation of and assistance with tendering\nToday | Self-employed, architecture and 3D art"
+};
+const QUESTIONS = [
+  ["sprache", "Sprache der Website: Deutsch, Englisch oder beides?"],
+  ["ansicht", "Welche Ansicht soll bleiben: C · Carrd, A · Papier oder B · Blaupause?"],
+  ["domain", "Hast du eine eigene Domain, oder soll die Seite erstmal unter github.io laufen?"],
+  ["haus-f", "Haus F: Ist es gebaut oder eine Studie?"],
+  ["fotos-aufkirchen", "Aufkirchen: Sind alle 7 Fotos von Petra Steiner?"],
+  ["fotos-haus-d", "Haus D: Sind alle Fotos von Herbert Stolz?"],
+  ["fotos-gross", "Gibt es größere Versionen der zwei kleinen Aufkirchen-Fotos?"],
+  ["figur", "Sind die blaue und die rote 3D-Figur dieselbe? Wie heißt sie?"],
+  ["namen", "Passen die Namen der Kunst-Serien (Illustrationen, Pixel Art, Shader-Studien, 3D-Werkstatt, Trimsheets und Texturen)?"],
+  ["woodshaker", "Das Foto der Holzmaschine (woodshaker): Wo gehört es hin, oder soll es raus?"],
+  ["portraet", "Welches Porträt soll in die Vita?"],
+  ["bueros", "Sind die Büronamen in der Vita richtig geschrieben?"],
+  ["impressum", "Name und Anschrift für das Impressum"]
+];
+const LABELS = {title:"Titel", group:"Gruppe", kind:"Typ", place:"Ort", year:"Jahr", lp:"Leistung", partner:"Partner", photo:"Fotografie", text:"Text", note:"Notiz an Claude"};
+const clean = o => Object.fromEntries(Object.entries(o || {}).filter(([k, v]) => typeof v === "string" ? v.trim() !== "" : v != null));
+const M = p => {
+  const e = clean(EDITS[p.id]); const m = {...p, ...e};
+  if (typeof e.text === "string") m.text = e.text.split(/\n\s*\n/).map(t => t.trim()).filter(Boolean);
+  return m;
+};
+const site = () => ({...SITE_DEFAULT, ...clean(EDITS.site)});
+let LANG = "de";
+const L = (de, en) => LANG === "en" ? en : de;
+const TITLE_EN = {"studie-fertighaus":"Prefab House Study","messestand-roy-robson":"Roy Robson Trade Fair Stand","illustrationen":"Illustrations","3d-charakter":"3D Character"};
+const KIND_EN = {"Wohnhaus":"Residential house","Pfarrzentrum":"Parish centre","Ferienapartements":"Holiday apartments","Ferienapartments":"Holiday apartments","Wettbewerbsbeitrag":"Competition entry","Studie":"Study","Messestand":"Trade fair stand","Entwurf":"Design","Umbau":"Conversion"};
+const D = p0 => {
+  const m = M(p0);
+  if (LANG !== "en") return m;
+  const d = {...m};
+  if (TITLE_EN[p0.id] && m.title === p0.title) d.title = TITLE_EN[p0.id];
+  if (m.kind) d.kind = KIND_EN[m.kind.trim()] || m.kind;
+  if (m.lp) d.lp = m.lp.replace(/^LP\s*/i, "HOAI phases ");
+  if (m.partner) d.partner = m.partner.replace(/^mit\s+/i, "with ");
+  return d;
+};
+function missing(p){
+  const m = M(p), isArt = p.section === "art";
+  const need = isArt ? [] : ["kind", "year"].concat(m.plan || m.group !== "Gebaut" ? [] : ["photo"]);
+  const out = need.filter(k => !m[k]).map(k => isArt && k === "kind" ? "Technik" : LABELS[k]);
+  return out;
+}
+
+function renderOverview(){
+  const P = projects.map(D), A = art.map(D);
+  const groups = [...new Set(["Gebaut", "Entwürfe und Studien", ...P.map(p => p.group)])].filter(g => P.some(p => p.group === g));
+  document.getElementById("plists").innerHTML = `
+    <div class="plist">${groups.flatMap(g => P.filter(p => p.group === g)).map(p => `
+      <a class="prow" href="#${p.id}">
+        <div class="thumb">${imgTag(imgs(p)[p.cover-1], p.title)}</div>
+        <div class="meta" style="min-width:0"><h3>${esc(p.title)}</h3><span class="mono">${metaLine(p)}</span></div>
+        <span class="go">Projekt ansehen →</span>
+      </a>`).join("")}</div>`;
+  document.getElementById("agrid").innerHTML = A.map(p => `
+    <a class="acard${p.pixel ? " pixel" : ""}" href="#${p.id}">
+      <div class="thumb">${imgTag(imgs(p)[p.cover-1], p.title)}</div>
+      <h3>${esc(p.title)}</h3>
+    </a>`).join("");
+  const S = site();
+  const vitaText = LANG === "en" ? (S.vita_en || SITE_DEFAULT.vita_en) : S.vita;
+  document.getElementById("vita-dl").innerHTML = vitaText.split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+    const [a, ...b] = l.split("|"); return `<dt>${esc(a.trim())}</dt><dd>${b.join("|").split(";").map(x => esc(x.trim())).join("<br>")}</dd>`;
+  }).join("");
+  document.getElementById("mail").textContent = S.email || "mail@beispiel.de";
+  renderOpen();
+}
+
+function renderOpen(){
+  const box = document.getElementById("offen");
+  box.hidden = !EDITING;
+  if (!EDITING) { box.innerHTML = ""; return; }
+  const S = site(), ans = (EDITS.site && EDITS.site.answers) || {};
+  const rows = all.map(p => [M(p), missing(p)]);
+  const open = rows.filter(([, m]) => m.length).length;
+  box.innerHTML = `
+    <div class="sec-head"><h2>Offene Punkte</h2><span class="mono">${open} von ${all.length} Einträgen unvollständig</span></div>
+    <p class="hint">Was du hier einträgst, wird gespeichert und erscheint sofort auf der Seite. Ich übernehme es danach in die fertige Version für GitHub.</p>
+    <form class="ef" id="siteform">
+      <h3 class="eh">Allgemein</h3>
+      <label>E-Mail-Adresse<input id="f-email" type="email" value="${esc(S.email)}" placeholder="name@beispiel.de"></label>
+      <label>Vita <small>eine Zeile pro Eintrag: links | rechts, mehrere Angaben mit ; trennen</small><textarea id="f-vita" rows="7">${esc(S.vita)}</textarea></label>
+      <h3 class="eh">Fragen</h3>
+      ${QUESTIONS.map(([k, q]) => `<label>${esc(q)}<textarea data-q="${k}" rows="2" placeholder="Antwort">${esc(ans[k] || "")}</textarea></label>`).join("")}
+      <div class="ebar"><button type="submit" class="primary">Speichern</button><button type="button" id="copyall">Alles kopieren</button><span class="estat" aria-live="polite"></span></div>
+      <p class="hint" id="modehint"></p>
+      <textarea id="exportbox" rows="8" readonly hidden></textarea>
+    </form>
+    <h3 class="eh">Projekte und Arbeiten</h3>
+    <ul class="olist">${rows.map(([m, miss]) => `<li><a href="#${m.id}">${esc(m.title)}</a>
+      <span class="mono">${miss.length ? "fehlt: " + miss.map(esc).join(", ") : "vollständig"}</span></li>`).join("")}</ul>`;
+  DB_READY.then(db => { const h = box.querySelector("#modehint"); if (h) h.textContent = db
+    ? "Deine Einträge werden mit der Seite gespeichert. Ich kann sie direkt lesen."
+    : "Diese Ansicht kann nicht in der Seite speichern. Deine Einträge bleiben in diesem Browser. Wenn du fertig bist, klick „Alles kopieren“ und füg den Text hier im Chat ein."; });
+  box.querySelector("#copyall").addEventListener("click", async () => {
+    const t = exportText(), ta = box.querySelector("#exportbox"), st = box.querySelector(".estat");
+    try { await navigator.clipboard.writeText(t); st.textContent = "Kopiert. Jetzt im Chat einfügen."; }
+    catch (e) { ta.hidden = false; ta.value = t; ta.focus(); ta.select(); st.textContent = "Text ist markiert. Mit Strg+C kopieren."; }
+  });
+  box.querySelector("#siteform").addEventListener("submit", async e => {
+    e.preventDefault();
+    const answers = {}; box.querySelectorAll("[data-q]").forEach(t => { if (t.value.trim()) answers[t.dataset.q] = t.value.trim(); });
+    await save("site", { email: box.querySelector("#f-email").value.trim(), vita: box.querySelector("#f-vita").value.trim(), answers }, box.querySelector(".estat"));
+  });
+}
+
+function editForm(p){
+  const m = M(p), isArt = p.section === "art";
+  const keys = isArt ? ["title", "year"] : ["title", "group", "kind", "year", "lp", "partner", "photo"];
+  const field = k => k === "group"
+    ? `<label>${LABELS[k]}<select data-k="group">${["Gebaut", "Entwürfe und Studien"].map(g => `<option${m.group === g ? " selected" : ""}>${g}</option>`).join("")}</select></label>`
+    : `<label>${isArt && k === "kind" ? "Technik" : LABELS[k]}<input data-k="${k}" value="${esc(m[k] || "")}"></label>`;
+  return `<form class="ef framed" id="itemform">
+    <h3 class="eh">Bearbeiten</h3>
+    <div class="egrid">${keys.map(field).join("")}</div>
+    <label>Text <small>Absätze mit einer Leerzeile trennen. Stichpunkte reichen, ich formuliere sie dann aus.</small><textarea data-k="text" rows="8">${esc((m.text || []).join("\n\n"))}</textarea></label>
+    <label>${LABELS.note} <small>z. B. Korrekturen, Bildreihenfolge, was raus soll</small><textarea data-k="note" rows="2">${esc(m.note || "")}</textarea></label>
+    <div class="ebar"><button type="submit" class="primary">Speichern</button><span class="estat" aria-live="polite"></span></div>
+  </form>`;
+}
+
+// Speichern: in der Datenbank der Seite, sonst als Notlösung in diesem Browser
+const LOCAL_KEY = "portfolio-edits";
+function saveLocal(id, data){
+  EDITS = {...EDITS, [id]: data};
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(EDITS)); } catch (e) {}
+}
+async function save(id, data, stat){
+  stat.textContent = "Speichert …";
+  const db = await DB_READY;
+  let msg = "Gespeichert";
+  if (db) {
+    try { await db.doc("edits/" + id).set(data); }
+    catch (err) { saveLocal(id, data); msg = "Nur in diesem Browser gespeichert. Schick mir alles über „Alles kopieren“ im Chat."; }
+  } else {
+    saveLocal(id, data); msg = "Nur in diesem Browser gespeichert. Schick mir alles über „Alles kopieren“ im Chat.";
+  }
+  DIRTY = false; rerender();
+  document.querySelectorAll(".estat").forEach(x => { x.textContent = msg; });
+}
+function exportText(){
+  const lines = [];
+  const S = EDITS.site || {};
+  if (S.email) lines.push("E-Mail: " + S.email);
+  if (S.intro) lines.push("Vorstellung: " + S.intro);
+  if (S.vita) lines.push("Vita:\n" + S.vita);
+  for (const [k, q] of QUESTIONS) if (S.answers && S.answers[k]) lines.push(q + "\n→ " + S.answers[k]);
+  for (const p of all) { const e = clean(EDITS[p.id]); const keys = Object.keys(e); if (!keys.length) continue;
+    lines.push("\n## " + (e.title || p.title) + "\n" + keys.map(k => (LABELS[k] || k) + ": " + e[k]).join("\n")); }
+  return lines.join("\n\n") || "Noch nichts eingetragen.";
+}
+
+let lbList = [], lbIdx = 0, lbTitle = "";
+function renderDetail(p0){
+  const p = D(p0);
+  const list0 = p.section === "art" ? art : projects;
+  const i = list0.indexOf(p0), next = D(list0[(i+1) % list0.length]);
+  const backId = p.section === "art" ? "kunst" : "architektur";
+  const list = imgs(p), cover = list[(p.cover||1)-1];
+  const rest = list.filter(x => x !== cover);
+  lbList = cover && !cover.video ? [cover, ...rest] : []; lbTitle = p.title + (p.photo ? L(" · Foto: ", " · Photo: ") + p.photo : "");
+  const fact = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
+  const isArt = p.section === "art";
+  const facts = isArt
+    ? fact(L("Jahr","Year"), p.year)
+    : fact(L("Typ","Type"), p.kind) + fact(L("Jahr","Year"), p.year) + fact(L("Leistung","Services"), p.lp) + fact("Partner", p.partner) + (p.plan ? "" : fact(L("Fotografie","Photography"), p.photo));
+  const text = p.text && p.text.length ? p.text.map(t => `<p>${esc(t)}</p>`).join("") : "";
+  const det = document.getElementById("detail");
+  lb.classList.toggle("pixel", !!p.pixel);
+  det.className ="detail" + (p.pixel ? " pixel" : "") + (p.plan ? " plan" : "");
+  det.innerHTML = `
+    <a class="back" href="#${backId}"><img class="px backgif" src="img/ui/home.gif" width="190" height="75" alt=""><span>← ${isArt ? L("Alle Arbeiten","All works") : L("Alle Projekte","All projects")}</span></a>
+    <h1>${esc(p.title)}</h1>
+    ${EDITING ? editForm(p0) : ""}
+    ${cover.video ? `<figure class="cover vcover" style="margin:0 0 40px">${vid(cover, true)}</figure>`
+      : `<figure class="cover" style="margin:0 0 40px" data-i="0">${imgTag(cover, p.title, false)}
+      ${p.photo ? `<figcaption class="mono credit">${L("Foto","Photo")}: ${esc(p.photo)}</figcaption>` : ""}</figure>`}
+    ${facts || text ? `<div class="dgrid framed">
+      ${facts ? `<dl class="facts">${facts}</dl>` : "<div></div>"}
+      ${text ? `<div class="ptext">${text}</div>` : ""}
+    </div>` : ""}
+    ${rest.length ? `<div class="gal">${rest.map((x, n) => x.video ? `<div class="gitem">${vid(x, false)}</div>`
+      : `<button type="button" data-i="${n+1}" aria-label="Bild ${n+2} vergrößern">${imgTag(x, p.title + " Bild " + (n+2))}</button>`).join("")}</div>` : ""}
+    <div class="next"><a href="#${backId}">← ${L("Übersicht","Overview")}</a><a href="#${next.id}">${isArt ? L("Nächste Arbeit","Next work") : L("Nächstes Projekt","Next project")}: ${esc(next.title)} →</a></div>`;
+  const f = det.querySelector("#itemform");
+  if (f) f.addEventListener("submit", async e => {
+    e.preventDefault();
+    const data = {}; f.querySelectorAll("[data-k]").forEach(el => { data[el.dataset.k] = el.value.trim(); });
+    await save(p0.id, data, f.querySelector(".estat"));
+  });
+}
+
+const lb = document.getElementById("lb");
+function openLb(i){ if (!lbList.length) return; lbIdx = (i + lbList.length) % lbList.length; const x = lbList[lbIdx];
+  document.getElementById("lbImg").src = x.src;
+  document.getElementById("lbCap").textContent = `${lbTitle} · ${lbIdx+1}/${lbList.length}`; lb.hidden = false; document.getElementById("lbClose").focus(); }
+document.getElementById("detail").addEventListener("click", e => { const t = e.target.closest("[data-i]"); if (t) openLb(+t.dataset.i); });
+document.getElementById("lbPrev").onclick = () => openLb(lbIdx-1);
+document.getElementById("lbNext").onclick = () => openLb(lbIdx+1);
+document.getElementById("lbClose").onclick = () => { lb.hidden = true; };
+lb.addEventListener("click", e => { if (e.target === lb) lb.hidden = true; });
+addEventListener("keydown", e => { if (lb.hidden) return;
+  if (e.key === "Escape") lb.hidden = true; if (e.key === "ArrowLeft") openLb(lbIdx-1); if (e.key === "ArrowRight") openLb(lbIdx+1); });
+document.addEventListener("input", e => { if (e.target.closest(".ef")) DIRTY = true; });
+
+function currentItem(){ const h = location.hash.slice(1); return all.find(x => x.id === h); }
+function rerender(){ renderOverview(); const p = currentItem(); if (p) renderDetail(p); }
+function route(){
+  const h = location.hash.slice(1);
+  const p = currentItem();
+  const legal = h === "impressum" || h === "datenschutz";
+  lb.hidden = true; DIRTY = false;
+  document.getElementById("overview").hidden = !!p || legal;
+  document.getElementById("detail").hidden = !p;
+  document.getElementById("legal").hidden = !legal;
+  document.getElementById("impressum-page").hidden = h !== "impressum";
+  document.getElementById("datenschutz-page").hidden = h !== "datenschutz";
+  document.querySelectorAll(".mailtxt").forEach(x => { x.textContent = site().email || "severin.brinkies@posteo.de"; });
+  if (legal){ window.scrollTo(0,0); }
+  else if (p){ renderDetail(p); window.scrollTo(0,0); }
+  else if (h){ const el = document.getElementById(h); if (el) el.scrollIntoView(); }
+}
+renderOverview();
+addEventListener("hashchange", route); route();
+
+// Bearbeiten-Modus: nur wenn diese Ansicht speichern darf
+const ebtn = document.getElementById("editbtn");
+ebtn.onclick = () => {
+  if (EDITING && DIRTY && !document.getElementById("discard-ok")) {
+    ebtn.insertAdjacentHTML("afterend", `<span id="discard-ok" class="econfirm">Ungespeicherte Änderungen verwerfen? <button type="button" id="dy">Ja</button> <button type="button" id="dn">Nein</button></span>`);
+    document.getElementById("dy").onclick = () => { document.getElementById("discard-ok").remove(); DIRTY = false; ebtn.click(); };
+    document.getElementById("dn").onclick = () => document.getElementById("discard-ok").remove();
+    return;
+  }
+  EDITING = !EDITING; DIRTY = false;
+  document.documentElement.classList.toggle("editing", EDITING);
+  ebtn.textContent = EDITING ? "Fertig" : "Bearbeiten";
+  ebtn.setAttribute("aria-pressed", EDITING);
+  rerender();
+  if (EDITING && !currentItem()) document.getElementById("offen").scrollIntoView();
+};
+const DB_READY = (async () => {
+  try {
+    if (!window.claude || !window.claude.use) return null;
+    const db = await window.claude.use("db"); if (!db) return null;
+    const user = await window.claude.use("user");
+    const can = user ? await user.can("data.write") : null;
+    if (can === false) return null;
+    DB = db;
+    db.collection("edits").onSnapshot(snap => {
+      const n = {}; snap.docs.forEach(d => { if (d.exists) n[d.id] = d.data(); });
+      EDITS = {...EDITS, ...n}; if (!DIRTY) rerender();
+    }, () => {});
+    return db;
+  } catch (e) { return null; }
+})();
+
+document.documentElement.setAttribute("data-variant", "c");
+function setLang(l){
+  LANG = l === "en" ? "en" : "de";
+  document.documentElement.lang = LANG;
+  document.getElementById("langDE").setAttribute("aria-pressed", LANG === "de");
+  document.getElementById("langEN").setAttribute("aria-pressed", LANG === "en");
+  try { localStorage.setItem("lang", LANG); } catch(e){}
+  rerender();
+}
+document.getElementById("langDE").onclick = () => setLang("de");
+document.getElementById("langEN").onclick = () => setLang("en");
+let savedLang = "de"; try { savedLang = localStorage.getItem("lang") || "de"; } catch(e){}
+setLang(savedLang);
+
+document.getElementById("copy").addEventListener("click", async e => {
+  const t = document.getElementById("mail").textContent;
+  try { await navigator.clipboard.writeText(t); e.currentTarget && 0; document.getElementById("copy").textContent = L("Kopiert","Copied"); }
+  catch { const r = document.createRange(); r.selectNodeContents(document.getElementById("mail"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.getElementById("copy").textContent = L("Markiert, mit Strg+C kopieren","Selected, press Ctrl+C"); }
+});
+</script>
+
+</body>
+</html>
