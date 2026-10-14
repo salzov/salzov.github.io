@@ -270,8 +270,10 @@ footer{margin-top:24px;color:var(--muted)}
 .detail.pixel .gal > button img{object-fit:contain}
 @media (max-width:760px){.gal,.detail.pixel .gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
 header nav a.on{text-decoration:underline;text-underline-offset:4px}
-.cover.small{background:none}
-.cover.small img{width:min(100%,480px);margin-inline:auto;display:block}
+.detail .cover,.detail.pixel .cover,.detail.plan .cover{background:none;padding:0;display:block}
+.detail .cover img,.detail.pixel .cover img,.detail.plan .cover img{width:auto;max-width:100%;height:auto;max-height:480px;margin-inline:auto;display:block;object-fit:contain}
+.detail.pixel .cover img{height:480px}
+.detail .vcover video{width:auto;max-width:100%;max-height:480px;margin-inline:auto;display:block}
 </style>
 
 <div class="wrap">
@@ -423,8 +425,8 @@ Object.assign(IMG, {"planet-plant":[["planet-plant/01.jpg",1800,771],["planet-pl
 "pixel-art":[["pixel-art/13.png",303,303],["pixel-art/01.gif",128,128],["pixel-art/02.gif",160,160],["pixel-art/03.gif",160,160],["pixel-art/04.gif",160,160],["pixel-art/05.gif",160,160],["pixel-art/06.gif",480,480],["pixel-art/07.png",64,64],["pixel-art/08.png",32,32],["pixel-art/09.png",32,32],["pixel-art/10.png",64,64],["pixel-art/12.jpg",1542,1548],["pixel-art/11.png",200,200]],
 "3d-werkstatt":[["video/01.jpg",1280,514,"video/01.mp4"],["video/02.jpg",1280,584,"video/02.mp4"],["video/03.jpg",1280,724,"video/03.mp4"],["video/04.jpg",1280,608,"video/04.mp4"],["video/05.jpg",1280,544,"video/05.mp4"]],
 "impossible-landscapes":[["impossible-landscapes/01.jpg",1600,1600],["impossible-landscapes/02.jpg",1024,1024],["impossible-landscapes/03.jpg",1024,1024]],
-"asian-assets":[["asian-assets/01.jpg",1600,1600],["asian-assets/02.jpg",1600,1600],["asian-assets/03.jpg",1600,1600],["asian-assets/04.jpg",1600,1600],["asian-assets/05.jpg",1600,1600],["asian-assets/06.jpg",1600,1600],["asian-assets/07.jpg",1600,1600],["asian-assets/08.jpg",1600,1600],["asian-assets/09.jpg",1600,1600],["asian-assets/10.jpg",1600,1600]],
-"asian-modular-kit":[["asian-modular-kit/01.jpg",1600,1202],["asian-modular-kit/02.jpg",1600,1600],["asian-modular-kit/03.jpg",1600,1600],["asian-modular-kit/04.jpg",1600,1600],["asian-modular-kit/05.jpg",1600,1600],["asian-modular-kit/06.jpg",1600,1600],["asian-modular-kit/07.jpg",1600,1600],["asian-modular-kit/08.jpg",1600,1600],["asian-modular-kit/09.jpg",1600,1600],["asian-modular-kit/10.jpg",1600,1600],["asian-modular-kit/11.jpg",1600,1600],["asian-modular-kit/12.jpg",1600,1600],["asian-modular-kit/13.jpg",1600,1600]],
+"asian-assets":[["asian-assets/06.jpg",1600,1600],["asian-assets/02.jpg",1600,1600],["asian-assets/03.jpg",1600,1600],["asian-assets/04.jpg",1600,1600],["asian-assets/05.jpg",1600,1600],["asian-assets/07.jpg",1600,1600],["asian-assets/08.jpg",1600,1600],["asian-assets/09.jpg",1600,1600],["asian-assets/10.jpg",1600,1600]],
+"asian-modular-kit":[["asian-modular-kit/07.jpg",1600,1600],["asian-modular-kit/02.jpg",1600,1600],["asian-modular-kit/03.jpg",1600,1600],["asian-modular-kit/04.jpg",1600,1600],["asian-modular-kit/05.jpg",1600,1600],["asian-modular-kit/06.jpg",1600,1600],["asian-modular-kit/08.jpg",1600,1600],["asian-modular-kit/09.jpg",1600,1600],["asian-modular-kit/10.jpg",1600,1600],["asian-modular-kit/11.jpg",1600,1600],["asian-modular-kit/12.jpg",1600,1600],["asian-modular-kit/13.jpg",1600,1600]],
 "cozy-tower":[["cozy-tower/01.jpg",1800,1018],["cozy-tower/02.jpg",1800,1018],["cozy-tower/03.jpg",1800,1006],["cozy-tower/04.jpg",1797,1009],["cozy-tower/05.jpg",1800,1025],["cozy-tower/06.jpg",1800,1035],["cozy-tower/07.jpg",1800,969],["cozy-tower/08.jpg",1800,1051],["cozy-tower/09.jpg",1799,1003]],
 "messestand-roy-robson":[["messestand-roy-robson/01.png",2000,1414]]});
 const art = [
