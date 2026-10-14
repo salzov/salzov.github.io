@@ -645,8 +645,7 @@ function renderDetail(p0){
     <h1>${esc(p.title)}</h1>
     ${EDITING ? editForm(p0) : ""}
     ${!cover ? "" : cover.video ? `<figure class="cover vcover" style="margin:0 0 40px">${vid(cover, true)}</figure>`
-      : `<figure class="cover${p.smallcover ? " small" : ""}" style="margin:0 0 40px" data-i="0">${imgTag(cover, p.title, false)}
-      ${p.photo ? `<figcaption class="mono credit">${L("Foto","Photo")}: ${esc(p.photo)}</figcaption>` : ""}</figure>`}
+      : `<figure class="cover${p.smallcover ? " small" : ""}" style="margin:0 0 40px" data-i="0">${imgTag(cover, p.title, false)}</figure>`}
     ${facts || text ? `<div class="dgrid framed">
       ${facts ? `<dl class="facts">${facts}</dl>` : "<div></div>"}
       ${text ? `<div class="ptext">${text}</div>` : ""}
