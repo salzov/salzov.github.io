@@ -269,6 +269,7 @@ footer{margin-top:24px;color:var(--muted)}
 .detail.pixel .gal > button{padding:12%}
 .detail.pixel .gal > button img{object-fit:contain}
 @media (max-width:760px){.gal,.detail.pixel .gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
+header nav a.on{text-decoration:underline;text-underline-offset:4px}
 </style>
 
 <div class="wrap">
@@ -686,7 +687,15 @@ function route(){
   document.querySelectorAll(".mailtxt").forEach(x => { x.textContent = site().email || "severin.brinkies@posteo.de"; });
   if (legal){ window.scrollTo(0,0); }
   else if (p){ renderDetail(p); window.scrollTo(0,0); }
-  else if (h){ const el = document.getElementById(h); if (el) el.scrollIntoView(); }
+  else {
+    const pages = ["architektur","kunst","vita","kontakt"];
+    const pg = pages.includes(h) ? h : "start";
+    document.getElementById("start").hidden = pg !== "start";
+    document.querySelector("footer .home").style.visibility = pg === "start" ? "hidden" : "";
+    pages.forEach(id => { document.getElementById(id).hidden = id !== pg; });
+    document.querySelectorAll('header nav a').forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#"+pg));
+    window.scrollTo(0,0);
+  }
 }
 renderOverview();
 addEventListener("hashchange", route); route();
