@@ -282,7 +282,7 @@ header nav a.on{text-decoration:underline;text-underline-offset:4px}
     <a class="name" href="#start">Severin Brinkies</a>
     <nav aria-label="Hauptnavigation">
       <a href="#architektur"><x-de>Architektur</x-de><x-en>Architecture</x-en></a><span>/</span>
-      <a href="#kunst"><x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></a><span>/</span>
+      <a href="#freie-arbeiten"><x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></a><span>/</span>
       <a href="#vita"><x-de>Vita</x-de><x-en>CV</x-en></a><span>/</span>
       <a href="#kontakt"><x-de>Kontakt</x-de><x-en>Contact</x-en></a>
     </nav>
@@ -298,7 +298,7 @@ header nav a.on{text-decoration:underline;text-underline-offset:4px}
       </div>
       <nav class="screen dash inav" aria-label="Bereiche">
         <a href="#architektur"><img class="px" src="ui/arch.gif" width="128" height="128" alt=""><span>// <x-de>Architektur</x-de><x-en>Architecture</x-en></span></a>
-        <a href="#kunst"><img class="px" src="ui/art.gif" width="128" height="128" alt=""><span>// <x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></span></a>
+        <a href="#freie-arbeiten"><img class="px" src="ui/art.gif" width="128" height="128" alt=""><span>// <x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></span></a>
         <a href="#kontakt"><img class="px" src="ui/contact.gif" width="128" height="128" alt=""><span>// <x-de>Kontakt</x-de><x-en>Contact</x-en></span></a>
       </nav>
     </div>
@@ -310,7 +310,7 @@ header nav a.on{text-decoration:underline;text-underline-offset:4px}
       <div id="plists"></div>
     </section>
 
-    <section id="kunst">
+    <section id="freie-arbeiten">
       <div class="sec-head"><h2><x-de>Freie Arbeiten</x-de><x-en>Personal Projects</x-en></h2></div>
       <div class="agrid" id="agrid"></div>
     </section>
@@ -627,7 +627,7 @@ function renderDetail(p0){
   const p = D(p0);
   const list0 = p.section === "art" ? art : projects;
   const i = list0.indexOf(p0), next = D(list0[(i+1) % list0.length]);
-  const backId = p.section === "art" ? "kunst" : "architektur";
+  const backId = p.section === "art" ? "freie-arbeiten" : "architektur";
   const list = imgs(p), cover = p.nocover ? null : list[(p.cover||1)-1];
   const rest = list.filter(x => x !== cover);
   const off = cover && !cover.video ? 1 : 0; lbList = off ? [cover, ...rest] : rest.filter(x => !x.video); lbTitle = p.title + (p.photo ? L(" · Foto: ", " · Photo: ") + p.photo : "");
@@ -677,6 +677,7 @@ document.addEventListener("input", e => { if (e.target.closest(".ef")) DIRTY = t
 function currentItem(){ const h = location.hash.slice(1); return all.find(x => x.id === h); }
 function rerender(){ renderOverview(); const p = currentItem(); if (p) renderDetail(p); }
 function route(){
+  if (location.hash === "#kunst") { history.replaceState(null, "", "#freie-arbeiten"); }
   const h = location.hash.slice(1);
   const p = currentItem();
   const legal = h === "impressum" || h === "datenschutz";
@@ -690,7 +691,7 @@ function route(){
   if (legal){ window.scrollTo(0,0); }
   else if (p){ renderDetail(p); window.scrollTo(0,0); }
   else {
-    const pages = ["architektur","kunst","vita","kontakt"];
+    const pages = ["architektur","freie-arbeiten","vita","kontakt"];
     const pg = pages.includes(h) ? h : "start";
     document.getElementById("start").hidden = pg !== "start";
     document.querySelector("footer .home").style.visibility = pg === "start" ? "hidden" : "";
